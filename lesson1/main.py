@@ -50,9 +50,9 @@ def main():
 
     wines = excel_data_df.to_dict(orient='records')
     wines_by_category = defaultdict(list)
-    for row in wines:
-        category = row['Категория']
-        wines_by_category[category].append(row)
+    for alcohol in wines:
+        category = alcohol['Категория']
+        wines_by_category[category].append(alcohol)
 
     env = Environment(
         loader=FileSystemLoader('.'),
