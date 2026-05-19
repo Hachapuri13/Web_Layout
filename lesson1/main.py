@@ -3,7 +3,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from collections import defaultdict
 import datetime
 import pandas
-
+import argparse
 
 def get_year_declination(year):
     exceptions = [11, 12, 13, 14]
@@ -21,8 +21,26 @@ def get_year_declination(year):
         return "лет"
 
 
+def xlsx_file(value):
+    if not value.lower().endswith('.xlsx'):
+        raise argparse.ArgumentTypeError(
+            f'{value} is not .xlsx file!'
+        )
+    return value
+
+
 def main():
-    excel_data_df = pandas.read_excel('wine3.xlsx', keep_default_na=False)
+    parser = argparse.ArgumentParser(
+        description='The program will launch the site on a local server http://127.0.0.1:8000/ '
+    )
+    parser.add_argument(
+        '--wine_tbl',
+        type=xlsx_file,
+        help='Path to a table with data about wine with the .xlsx extension',
+        default='wine3.xlsx'
+        )
+    args = parser.parse_args()
+    excel_data_df = pandas.read_excel(args.wine_tbl, keep_default_na=False)
 
     now = datetime.datetime.now()
     now_year = now.year
